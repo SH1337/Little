@@ -1,0 +1,25 @@
+// events/guildCreate.js
+const { MessageEmbed } = require('discord.js');
+
+module.exports = {
+  name: 'guildCreate',
+  once: false,
+  async execute(guild) {
+    const owner = await guild.fetchOwner();
+
+    // Créez un message d'accueil
+    const welcomeEmbed = new MessageEmbed()
+      .setColor('#00ff00')
+      .setTitle('Merci de m\'avoir ajouté à votre serveur!')
+      .setDescription(`Salut, je suis votre nouveau bot préféré! Mon préfixe par défaut est \`!\`. Tapez \`+help\` pour voir mes commandes.`)
+      .addField('Propriétaire du serveur', owner.user.tag)
+      .setThumbnail(guild.iconURL())
+      .setFooter('Bot d\'exemple');
+
+    // Envoyez le message d'accueil au salon de bienvenue par défaut (peut être personnalisé)
+    const defaultWelcomeChannel = guild.systemChannel;
+    if (defaultWelcomeChannel) {
+      defaultWelcomeChannel.send({ embeds: [welcomeEmbed] });
+    }
+  },
+};
